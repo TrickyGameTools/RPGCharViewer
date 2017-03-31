@@ -1,0 +1,27 @@
+-- Init/Config file
+-- Written by: License (License 13.06.24 - MacOS X (Intel))
+-- 15 Aug 2015;  01:38:48
+
+
+
+Var:File["RPGCharViewer.bmx"].HeaderAction=0
+Var:File["RPGCharViewer.bmx"].Know=YES
+Var:File["RPGCharViewer.bmx"].License=GNU%20-%20General%20Public%20License%20ver3
+Var:File["RPGCharViewer.bmx"].LicenseData["GNU%20-%20General%20Public%20License%20ver3"]["[COPYRIGHTHOLDER]"]=Jeroen%20P.%20Broks
+Var:File["RPGCharViewer.bmx"].LicenseData["GNU%20-%20General%20Public%20License%20ver3"]["[NAMEPROJECT]"]=RPG%20Char%20Viewer%20for%20Tricky's%20RPG%20Char%20framework
+Var:File["RPGCharViewer.bmx"].LicenseData["GNU%20-%20General%20Public%20License%20ver3"]["[WHATDOESITDO]"]=This%20utility%20provides%20a%20full%20list%20of%20all%20data%20of%20all%20characters%20found%20within%20a%20savegame%20created%20with%20this%20framework
+Var:File["RPGCharViewer.bmx"].LicenseData["GNU%20-%20General%20Public%20License%20ver3"]["[YEAR]"]=2015
+Var:File["RPGCharViewer.bmx"].LicenseData["MIT%20License"]["<copyright_holders>"]=
+Var:File["RPGCharViewer.bmx"].LicenseData["MIT%20License"]["<year>"]=
+Var:File["RPGCharViewer.bmx"].LicenseData["Mozilla%20Public%20License%202.0"]["[year]"]=
+Var:File["RPGCharViewer.bmx"].LicenseData["Phantasar%20Closed%20License"][""]=
+Var:File["RPGCharViewer.bmx"].LicenseData["Phantasar%20Closed%20License"]["[year]"]=
+Var:File["RPGCharViewer.bmx"].LicenseData["Phantasar%20zLib"]["<copyright-holder>"]=
+Var:File["RPGCharViewer.bmx"].LicenseData["Phantasar%20zLib"]["<copyright-year>"]=
+Var:File["RPGCharViewer.bmx"].LicenseData["Phantasar%20zLib"]["<project>"]=
+Var:File["RPGCharViewer.bmx"].LicenseData["zLIB%20License"]["<copyright-holder>"]=
+Var:File["RPGCharViewer.bmx"].LicenseData["zLIB%20License"]["<copyright-year>"]=
+Var:File["RPGCharViewer.bmx"].LicenseData["zLIB%20License"]["<project>"]=
+Var:File["RPGCharViewer.bmx"].Size=12174
+Var:File["RPGCharViewer.bmx"].Time=1439595528
+
