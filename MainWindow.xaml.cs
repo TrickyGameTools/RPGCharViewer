@@ -20,6 +20,8 @@ namespace RPGCharViewer {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+            BMX.Copy = Copyright;
+            BMX.Init();
         }
     }
 }

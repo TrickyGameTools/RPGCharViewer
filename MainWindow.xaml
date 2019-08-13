@@ -13,6 +13,30 @@
         </LinearGradientBrush>
     </Window.Background>
     <Grid Cursor="Hand">
+        <ListBox HorizontalAlignment="Left" Height="247" VerticalAlignment="Top" Width="177" Margin="10,26,0,0">
+            <ListBox.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Yellow" Offset="0"/>
+                    <GradientStop Color="#FFFFB400" Offset="1"/>
+                </LinearGradientBrush>
+            </ListBox.Foreground>
+            <ListBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFB400FF" Offset="0"/>
+                    <GradientStop Color="#FF120019" Offset="1"/>
+                </LinearGradientBrush>
+            </ListBox.Background>
+        </ListBox>
+        <Label Content="Favorites" HorizontalAlignment="Left" Height="23" Margin="11,3,0,0" VerticalAlignment="Top" Width="176" Background="{x:Null}"/>
+        <WebBrowser HorizontalAlignment="Left" Height="909" Margin="207,8,0,0" VerticalAlignment="Top" Width="959"/>
+        <Label x:Name="Copyright" Content="Label" HorizontalAlignment="Left" Margin="11,922,0,0" VerticalAlignment="Top" Width="1155" Height="42" HorizontalContentAlignment="Center">
+            <Label.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Yellow" Offset="0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                </LinearGradientBrush>
+            </Label.Foreground>
+        </Label>
 
     </Grid>
 </Window>

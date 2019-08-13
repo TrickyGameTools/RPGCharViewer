@@ -1,7 +1,18 @@
+using System.Windows;
+using System.Windows.Controls;
+
+using TrickyUnits;
+
 namespace RPGCharViewer {
 
-    class BMX { // Let's give BlitzMax, the once so wonderful language a fond honorable adieu, this way.... :-/
+    static class BMX { // Let's give BlitzMax, the once so wonderful language a fond honorable adieu, this way.... :-/
 
+        static public Label Copy;
+        static public void Init() {
+            MKL.Version("Yo!", "20.20.20");
+            MKL.Lic("Yo!", "License comes later!");
+            Copy.Content = $"(c) Jeroen P. Broks {MKL.CYear(2015)}, released under the terms of the GPL 3.0";
+        }
     }
 }
 
