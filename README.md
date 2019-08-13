@@ -1,3 +1,8 @@
+# TRANSFORMATION
+
+This project is currently being transformed...
+Best is NOT to touch it until the transformation has been finished!
+
 # RPGCharViewer
 A tool I use for character savegame analysis
 
