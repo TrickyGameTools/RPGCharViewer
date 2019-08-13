@@ -8,3 +8,9 @@
 MKL_BackUp
 dmg
 shit 
+
+
+# Visual Studio
+.vs
+obj
+bin
