@@ -21,6 +21,7 @@ namespace RPGCharViewer {
         public MainWindow() {
             InitializeComponent();
             BMX.Copy = Copyright;
+            BMX.Browser = Browser;
             BMX.Init();
         }
     }

@@ -256,6 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="RPGCharViewer.ico" />
+    <Resource Include="RPGCharViewer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,16 +1,51 @@
+using System.Text;
+
 using System.Windows;
 using System.Windows.Controls;
 
 using TrickyUnits;
+using UseJCR6;
 
 namespace RPGCharViewer {
 
     static class BMX { // Let's give BlitzMax, the once so wonderful language a fond honorable adieu, this way.... :-/
 
         static public Label Copy;
+        static public WebBrowser Browser;
+
+        static string _htmlhead = "";
+        static public string htmlhead {
+            get {
+                if (_htmlhead != "") return _htmlhead;
+                var sb = new StringBuilder("<html><head>");
+                sb.Append("\t<style>\n");
+                sb.Append("		body    { background-color: #001100; color: #aaffaa; }\n");
+                sb.Append("		.error  { background-color: #ff0000; color: #ffff00; }\n");
+                sb.Append("		.content{ background-color: #331100; color: #ffbe00; }\n");
+                sb.Append("		.shared { background-color: #001100; color: rgb(180,100,255); }\n");
+                sb.Append("	</style>\n");
+                sb.Append("</head>\n");
+                sb.Append("~n~n~n<body>\n");
+                _htmlhead = sb.ToString();
+                return _htmlhead;
+            }
+        }
+        public const string htmlend = "</body>\n</html>";
+
         static public void Init() {
+            // Set Dirry
+            Dirry.InitAltDrives();
+
+            // JCR6
+            JCR6_lzma.Init();
+            JCR6_zlib.Init();
+            JCR6_jxsrcca.Init();
+            
+            // MKL version information
             MKL.Version("Yo!", "20.20.20");
             MKL.Lic("Yo!", "License comes later!");
+
+            // Form the copyright bar
             Copy.Content = $"(c) Jeroen P. Broks {MKL.CYear(2015)}, released under the terms of the GPL 3.0";
         }
     }
