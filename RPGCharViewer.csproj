@@ -62,6 +62,33 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="..\TrickyUnits\Dirry.cs">
+      <Link>Dependencies\TrickyUnits\Dirry.cs</Link>
+    </Compile>
+    <Compile Include="..\TrickyUnits\FileList.cs">
+      <Link>Dependencies\TrickyUnits\FileList.cs</Link>
+    </Compile>
+    <Compile Include="..\TrickyUnits\GINI Is Not Ini.cs">
+      <Link>Dependencies\TrickyUnits\GINI Is Not Ini.cs</Link>
+    </Compile>
+    <Compile Include="..\TrickyUnits\Maps.cs">
+      <Link>Dependencies\TrickyUnits\Maps.cs</Link>
+    </Compile>
+    <Compile Include="..\TrickyUnits\mkl.cs">
+      <Link>Dependencies\TrickyUnits\mkl.cs</Link>
+    </Compile>
+    <Compile Include="..\TrickyUnits\qstr.cs">
+      <Link>Dependencies\TrickyUnits\qstr.cs</Link>
+    </Compile>
+    <Compile Include="..\TrickyUnits\qstream.cs">
+      <Link>Dependencies\TrickyUnits\qstream.cs</Link>
+    </Compile>
+    <Compile Include="..\TrickyUnits\RPGStats.cs">
+      <Link>Dependencies\TrickyUnits\RPGStats.cs</Link>
+    </Compile>
+    <Compile Include="..\TrickyUnits\TrickyDbg.cs">
+      <Link>Dependencies\TrickyUnits\TrickyDbg.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
