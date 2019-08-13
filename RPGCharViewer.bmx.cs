@@ -1,4 +1,33 @@
+// Lic:
+// RPG Character Viewer
+// The real work
+// 
+// 
+// 
+// (c) Jeroen P. Broks, 
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+// Please note that some references to data like pictures or audio, do not automatically
+// fall under this licenses. Mostly this is noted in the respective files.
+// 
+// Version: 19.08.13
+// EndLic
+
+using System;
+using System.IO;
 using System.Text;
+using System.Diagnostics;
 
 using System.Windows;
 using System.Windows.Controls;
@@ -8,10 +37,46 @@ using UseJCR6;
 
 namespace RPGCharViewer {
 
+    class BMXConfig {
+
+        string File => Dirry.C("$AppSupport$/RPGCharViewer.Config.GINI");
+        readonly TGINI Data;
+
+        public BMXConfig() {
+            if (!System.IO.File.Exists(File)) {
+                QuickStream.SaveString(File,"[rem]\nIt's such a perfect day, you just keep me hanging on!\n");
+                MessageBox.Show($"Since the file '{File}' which is needed for configuration didn't exist, it has been created!","Notice!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            Data = GINI.ReadFromFile(File);
+        }
+
+        public string this[string key] {
+            get => Data.C(key);
+            set {
+                Data.D(key,value);
+                Data.SaveSource(File);
+            }
+        }
+
+        public string HTML_Swap {
+            get {
+                if (this["HTML_SWAP"] == "") {
+                    this["HTML_SWAP"] = Dirry.C("$AppSupport$/RPGCharView.Swap").Replace("\\","/");
+                    MessageBox.Show($"HTML_SWAP was not defined.\nIt's for now been auto-defined on {this["HTML_SWAP"]}!\nIf you want an other directory, please edit {File} (with an editor that is LF only text-file compatible)", "Notice!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                return Dirry.AD(this["HTML_SWAP"]);
+            }
+        }
+
+    }
+
     static class BMX { // Let's give BlitzMax, the once so wonderful language a fond honorable adieu, this way.... :-/
 
+        static BMXConfig Config;
         static public Label Copy;
         static public WebBrowser Browser;
+
+        static string Mascot => $"{Config.HTML_Swap}/RPGCharViewer.png";
 
         static string _htmlhead = "";
         static public string htmlhead {
@@ -25,16 +90,41 @@ namespace RPGCharViewer {
                 sb.Append("		.shared { background-color: #001100; color: rgb(180,100,255); }\n");
                 sb.Append("	</style>\n");
                 sb.Append("</head>\n");
-                sb.Append("~n~n~n<body>\n");
+                sb.Append("\n\n\n<body>\n");
                 _htmlhead = sb.ToString();
                 return _htmlhead;
             }
         }
         public const string htmlend = "</body>\n</html>";
 
+        static void WelcomeHTML() {
+            try {
+                var str = $"{htmlhead}<body>\n <table> \n\t <tr>\n\t\t<td>\n\t\t\t<img src='file://{Mascot}' alt='RPG Character Viewer'>\n\t\t </td>\n\t\t<td> \n\t\t\t <h1>RPGChar Viewer </h1> \n <pre>{MKL.All()}</pre>\n\t\t\t<p >Please throw me a save game file to analyse</td>\n\t\t</tr>\n\t</table>\n<p align = center > &copy Jeroen Petrus Broks {MKL.CYear(2015)}\n</ p >{htmlend}";
+                var dir = Config.HTML_Swap;
+                if (!File.Exists(Mascot)) {
+                    Directory.CreateDirectory(Config.HTML_Swap);
+                    var btp = QuickStream.OpenEmbedded("RPGCharViewer.png");
+                    var buf = btp.ReadBytes((int)btp.Size);
+                    btp.Close();
+                    btp = QuickStream.WriteFile(Mascot);
+                    btp.WriteBytes(buf);
+                    btp.Close();
+                }
+                var WelcomeFile = $"{dir}/Welcome.html";
+                Debug.WriteLine($"Writing \"{WelcomeFile}\"");
+                QuickStream.SaveString(WelcomeFile,str);
+                Browser.Navigate(WelcomeFile);
+            } catch(Exception lul) {
+                MessageBox.Show($"{lul.Message}\n\n{lul.StackTrace}", "ERROR!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         static public void Init() {
             // Set Dirry
             Dirry.InitAltDrives();
+
+            // Config
+            Config = new BMXConfig();
 
             // JCR6
             JCR6_lzma.Init();
@@ -42,8 +132,11 @@ namespace RPGCharViewer {
             JCR6_jxsrcca.Init();
             
             // MKL version information
-            MKL.Version("Yo!", "20.20.20");
-            MKL.Lic("Yo!", "License comes later!");
+            MKL.Version("RPG Character Viewer - RPGCharViewer.bmx.cs","19.08.13");
+            MKL.Lic    ("RPG Character Viewer - RPGCharViewer.bmx.cs","GNU General Public License 3");
+
+            // Write Welcome HTML
+            WelcomeHTML();
 
             // Form the copyright bar
             Copy.Content = $"(c) Jeroen P. Broks {MKL.CYear(2015)}, released under the terms of the GPL 3.0";
@@ -412,3 +505,4 @@ Select EventID()
 	End Select
 Forever
 */
+
