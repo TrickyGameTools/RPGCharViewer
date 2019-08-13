@@ -1,3 +1,15 @@
+namespace RPGCharViewer {
+
+    class BMX { // Let's give BlitzMax, the once so wonderful language a fond honorable adieu, this way.... :-/
+
+    }
+}
+
+// The code below is the original BlitzMax code
+// Assuming you are genius enough to get the BlitzMax compiler to work (it requires effort these days, I warn ya), the code below should still work, 
+// But as the BlitzMax compiler is is a bad state (I am lucky I still have an old one), I transformed this project, but the code below helps me on 
+// several reference issues, you know....
+
 /*
 Rem
 
