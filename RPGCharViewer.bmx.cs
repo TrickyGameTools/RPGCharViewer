@@ -1,5 +1,6 @@
-Rem
 /*
+Rem
+
 	RPG Char Viewer for Tricky's RPG Char framework
 	This utility provides a full list of all data of all characters found within a savegame created with this framework
 	
@@ -21,7 +22,7 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-*/
+
 
 
 Version: 15.08.15
@@ -352,3 +353,4 @@ Select EventID()
 		Bye
 	End Select
 Forever
+*/
