@@ -24,7 +24,7 @@
 // Version: 19.08.13
 // EndLic
 
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,10 +49,15 @@ namespace RPGCharViewer {
             try {
                 BMX.Copy = Copyright;
                 BMX.Browser = Browser;
+                BMX.MWindow = this;
                 BMX.Init();
             } catch (Exception E) {
                 MessageBox.Show(E.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e) {
+
         }
     }
 }

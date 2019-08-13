@@ -75,6 +75,7 @@ namespace RPGCharViewer {
         static BMXConfig Config;
         static public Label Copy;
         static public WebBrowser Browser;
+        static public MainWindow MWindow;
 
         static string Mascot => $"{Config.HTML_Swap}/RPGCharViewer.png";
 
@@ -130,8 +131,9 @@ namespace RPGCharViewer {
             JCR6_lzma.Init();
             JCR6_zlib.Init();
             JCR6_jxsrcca.Init();
-            
+
             // MKL version information
+            MKL.AllWidth = qstr.ToInt(Config["VersionOutLineWidth"]); if (MKL.AllWidth<40) { MKL.AllWidth = 60; Config["VersionOutLineWidth"] = "60"; }
             MKL.Version("RPG Character Viewer - RPGCharViewer.bmx.cs","19.08.13");
             MKL.Lic    ("RPG Character Viewer - RPGCharViewer.bmx.cs","GNU General Public License 3");
 
@@ -140,6 +142,7 @@ namespace RPGCharViewer {
 
             // Form the copyright bar
             Copy.Content = $"(c) Jeroen P. Broks {MKL.CYear(2015)}, released under the terms of the GPL 3.0";
+            MWindow.Title = $"RPG Character Viewer v{MKL.Newest} - Coded by Jeroen P. Broks";
         }
     }
 }

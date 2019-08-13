@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="1200" MinWidth="1200" MinHeight="1000" ResizeMode="NoResize">
+        Title="MainWindow" Height="1000" Width="1800" MinWidth="1200" MinHeight="1000" ResizeMode="NoResize">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="Black" Offset="1"/>
@@ -27,8 +27,8 @@
             </ListBox.Background>
         </ListBox>
         <Label Content="Favorites" HorizontalAlignment="Left" Height="23" Margin="11,3,0,0" VerticalAlignment="Top" Width="176" Background="{x:Null}"/>
-        <WebBrowser x:Name="Browser" HorizontalAlignment="Left" Height="909" Margin="207,8,0,0" VerticalAlignment="Top" Width="959"/>
-        <Label x:Name="Copyright" Content="Label" HorizontalAlignment="Left" Margin="11,922,0,0" VerticalAlignment="Top" Width="1155" Height="42" HorizontalContentAlignment="Center">
+        <WebBrowser x:Name="Browser" HorizontalAlignment="Left" Height="909" Margin="207,8,0,0" VerticalAlignment="Top" Width="1551"/>
+        <Label x:Name="Copyright" Content="Label" HorizontalAlignment="Left" Margin="11,922,0,0" VerticalAlignment="Top" Width="1773" Height="42" HorizontalContentAlignment="Center">
             <Label.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Yellow" Offset="0"/>
@@ -36,6 +36,58 @@
                 </LinearGradientBrush>
             </Label.Foreground>
         </Label>
+        <Button x:Name="RemoveFavorite" Content="-" HorizontalAlignment="Left" Height="35" Margin="152,278,0,0" VerticalAlignment="Top" Width="35" Foreground="Yellow">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF000019" Offset="0.02"/>
+                    <GradientStop Color="Red" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Button x:Name="AddFavorite" Content="+" HorizontalAlignment="Left" VerticalAlignment="Top" Width="34" Margin="113,278,0,0" Height="35" Foreground="Yellow">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF000019" Offset="0"/>
+                    <GradientStop Color="Lime" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <TextBox x:Name="Favorite_Name" HorizontalAlignment="Left" Height="35" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="98" Margin="10,278,0,0" FontSize="18">
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFFFB400" Offset="0"/>
+                    <GradientStop Color="Red" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+        </TextBox>
+        <ListBox HorizontalAlignment="Left" Height="537" Margin="11,318,0,0" VerticalAlignment="Top" Width="176">
+            <ListBox.Foreground>
+                <RadialGradientBrush>
+                    <GradientStop Color="#FBFFFFFF" Offset="0"/>
+                    <GradientStop Color="Yellow" Offset="1"/>
+                </RadialGradientBrush>
+            </ListBox.Foreground>
+            <ListBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Blue" Offset="0"/>
+                    <GradientStop Color="#FF01050A" Offset="1"/>
+                </LinearGradientBrush>
+            </ListBox.Background>
+        </ListBox>
+        <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Left" Height="43" Margin="11,874,0,0" VerticalAlignment="Top" Width="176" FontFamily="Segoe UI Black" FontSize="18" RenderTransformOrigin="0.51,0.086">
+            <Button.Background>
+                <RadialGradientBrush>
+                    <GradientStop Color="Blue" Offset="0"/>
+                    <GradientStop Color="Cyan" Offset="0.903"/>
+                </RadialGradientBrush>
+            </Button.Background>
+            <Button.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="Cyan" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Foreground>
+        </Button>
 
     </Grid>
 </Window>
