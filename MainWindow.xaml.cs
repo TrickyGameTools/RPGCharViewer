@@ -38,6 +38,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+
 
 namespace RPGCharViewer {
     /// <summary>
@@ -58,6 +60,13 @@ namespace RPGCharViewer {
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e) {
 
+        }
+
+        private void LoadButton_Click(object sender, RoutedEventArgs e) {
+            OpenFileDialog fd = new OpenFileDialog();
+            if (fd.ShowDialog() == true) {
+                BMX.Accept(fd.FileName);
+            }
         }
     }
 }

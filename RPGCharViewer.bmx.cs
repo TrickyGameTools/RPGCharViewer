@@ -28,6 +28,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 using System.Windows;
 using System.Windows.Controls;
@@ -83,7 +84,7 @@ namespace RPGCharViewer {
         static public string htmlhead {
             get {
                 if (_htmlhead != "") return _htmlhead;
-                var sb = new StringBuilder("<html><head>");
+                var sb = new StringBuilder("<html><head><title>Result RPG Character Viewer</title>");
                 sb.Append("\t<style>\n");
                 sb.Append("		body    { background-color: #001100; color: #aaffaa; }\n");
                 sb.Append("		.error  { background-color: #ff0000; color: #ffff00; }\n");
@@ -143,6 +144,206 @@ namespace RPGCharViewer {
             // Form the copyright bar
             Copy.Content = $"(c) Jeroen P. Broks {MKL.CYear(2015)}, released under the terms of the GPL 3.0";
             MWindow.Title = $"RPG Character Viewer v{MKL.Newest} - Coded by Jeroen P. Broks";
+        }
+
+
+        static void ThrowUp(string er) {
+            MessageBox.Show(er, "ERROR!", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        static void WriteLine(QuickStream bt, string line) => bt.WriteString($"{line}\n", true);
+
+        static bool validity(TJCRDIR JCR, QuickStream bt, string E) {
+            var ED = JCR.Entries[E.ToUpper()];//Local ED:TJCREntry = TJCREntry(MapValueForKey(JCR.entries, Upper(E)))
+            if (ED == null) { WriteLine(bt, "<p class='error'>JCR6 entry " + E + " appears to be illegal.<br>This is very likely an internal error. Please report this immediately!</p>"); return false; }
+            if (!JCR6.CompDrivers.ContainsKey(ED.Storage)) { //If Not ListContains(CDRV, ED.Storage)
+                WriteLine(bt, "<p class='error'>Required file " + E + " was compressed with an unknown compression algorithm and thus the data inside cannot be retrieved!<br>Supported algorithms in this tool are: <ul>");
+                foreach (string D in JCR6.CompDrivers.Keys) WriteLine(bt, "<li>" + D + "</li>");
+                WriteLine(bt, "<ul>Either your version of this tool is outdated, or the data inside this entry has been proteced");
+                return false;
+            }
+            return true;
+        }
+
+        static bool JCheck(TJCRDIR JCR, QuickStream bt, string E) {
+            var ret = JCR.Exists(E);
+            if (!ret) { WriteLine(bt, "<p class='error'>Character '" + qstr.StripDir(qstr.ExtractDir(E)) + "' misses the data entry '" + qstr.StripDir(E) + "'. Either this file is incomplete or the engine that wrote this file is outdated!</p>"); }
+            return ret;
+        }
+
+
+
+        static public void Accept(string file) {
+            var OutputFile = Dirry.AD($"{Config.HTML_Swap}/Result.html");
+            var HMascot = 600;
+            var WMascot = 410;
+            var wdiv = Browser.Width - WMascot;
+            if (file == "") return;
+            var jcr = JCR6.Dir(file);
+            //if (jcr==null) { ThrowUp(JCR6.JERROR); return; }
+            var bt = QuickStream.WriteFile(OutputFile);
+            if (bt == null) { ThrowUp("I could not create: " + OutputFile); return; }
+            WriteLine(bt, htmlhead);
+            WriteLine(bt, $"<table><tr><td><img src='file://{Mascot}' alt='Cute Elf' name='Cute Elf'></td><td>");
+            WriteLine(bt, $"<div style='width: {wdiv}pt; height: { HMascot }; overflow-x: auto; overflow-y: auto'>");
+            if (jcr == null) {
+                WriteLine(bt, $"<p class='error'>*** ERROR ***<br>JCR6 was not able to recognize this file at all.<br>JCR6 threw: {JCR6.JERROR}");
+                WriteLine(bt, "Either you were trying to analyse a file that is not related to any game of mine at all, or it wasn't a savegame file, or it was set up for an older game.");
+                WriteLine(bt, "Please note that any game released prior to August 2015 will not be picked up by this utility (as they were using a completely different framework, this util was set up for)<br></p>");
+                //WriteLine(bt, "<br>RPG Games written by me but NOT supported by this utility are:<ul class='bbc_list' style='list-style-type: lower-greek;'>");
+                //For Local G$= EachIn NotSupportedGames
+                //  WriteLine bt,"~t~t<li>" + G + "</li>"
+
+                //    Next
+                //WriteLine bt,"</ul>"
+                //
+                //WriteLine bt,"<br>Games either written by me or planned to be written by me which this utility will support are:<ul class='bbc_list' style='list-style-type: lower-greek;'>"
+
+                //For Local G$= EachIn SupportedGames
+                //   WriteLine bt,"~t~t<li>" + G + "</li>"
+
+                //Next
+                //WriteLine bt,"</ul>"
+
+                //WriteLine bt,"<p class='error'>JCR Reported:<br>" + JCR_Error.ErrorMessage + "</p>"
+
+                bt.Close(); return; //Return closure()
+            }
+            var dirs = new List<string>();
+            //string d = "", ch = "", chd = "";
+            Debug.WriteLine($"- Collecting dirs from: {file} ");
+            foreach (string f in jcr.Entries.Keys) { //For Local f$= EachIn EntryList(JCR)
+                var d = qstr.ExtractDir(f);
+                if (dirs.Contains(d)) { Debug.WriteLine($"  = Adding: {d}"); dirs.Add(d); }
+            }
+            Debug.WriteLine("- Analysing dirs for possible RPG Chars stuff");
+            //bool FoundSomething = false;
+            var gooddirs = new List<string>();
+            bool good = false;
+            foreach (string d in dirs) {
+                if (jcr.Exists(d + "/LINKS") && jcr.Exists(d + "/PARTY")){
+                    good = true;
+                    good = good && validity(jcr, bt, d + "/LINKS");
+                    good = good && validity(jcr, bt, d + "/PARTY");
+                    Debug.WriteLine($"  = Validity checks data > {good}");
+                    foreach (TJCREntry che in jcr.Entries.Values) { //        For ch = EachIn EntryList(JCR)
+                        var ch = che.Entry;
+                        if (qstr.Prefixed(ch.ToUpper(), d + "/CHARACTER/")) {
+                            Debug.WriteLine($"  = Checking character: " + qstr.StripDir(qstr.ExtractDir(ch)));
+                            good = good && validity(jcr, bt, ch);
+                            Debug.WriteLine($"   = Validity after character data file: {qstr.StripDir(ch)} > { good}");
+                            var chd = qstr.ExtractDir(ch);
+                            good = good && JCheck(jcr, bt, chd + "/LISTS");
+                            good = good && JCheck(jcr, bt, chd + "/NAME");
+                            good = good && JCheck(jcr, bt, chd + "/POINTS");
+                            good = good && JCheck(jcr, bt, chd + "/STATS");
+                            good = good && JCheck(jcr, bt, chd + "/STRDATA");
+                            Debug.WriteLine($"   = Existence check after character data file: { qstr.StripDir(ch) } > { good}");
+                        }
+                    }
+                    if (good) {
+                        gooddirs.Add(d);
+                        Debug.WriteLine("  = Approved: " + d);
+                    } else {
+                        Debug.WriteLine("  = Disapproved: " + d);
+                    }
+                }
+            }
+            WriteLine(bt, "<h1>Analysed file: " + qstr.StripDir(file) + "</h1>");
+            WriteLine(bt, "Below you can see all data tied to a character, playable or enemy alike (as long as it was in the memory at the moment this data was saved).<br><span class=shared>When the data comes accompanied with a name in this color it means the data is shared with that character, meaning that if the data changes, the data on the linked character will change as well. Multiple share links are possible, and there is no limit to the number of share links a piece of data can contain.</span>");
+            RPGCharacter rch;
+            RPGCharacter lch;
+            //string lchn;
+            foreach (string d in gooddirs) {
+                WriteLine(bt, "<h2>Folder: " + d + "</h2>");
+                RPG.RPGLoad(jcr, d);
+
+                WriteLine(bt, "<h4>Characters in party</h4><ol class=content>");
+
+                foreach (string ch in RPG.RPGParty) {
+                    if (ch != "") WriteLine(bt, "<li>" + ch + "</li>");
+                }
+                WriteLine(bt, "</ol>");
+
+                foreach (string ch in RPG.RPGChars.Keys) {
+                    Debug.WriteLine("- Outputting char: " + ch);
+                    rch = RPG.GrabChar(ch);
+                    WriteLine(bt, "<h4>Character: " + ch + "</h4>");
+                    WriteLine(bt, "<h5>Name:</h5><span class=content>" + rch.Name + "</span>");
+
+                    WriteLine(bt, "<h5>Data:</h5><div style='height:200pt; width: 500pt; overflow-y:auto'><table class=content>");
+                    foreach (string k in rch.StrData.Keys) {
+                        WriteLine(bt, "<tr><td>" + k + "</td><td>=</td><td>" + RPG.GrabChar(ch).GetData( k) + "</td>");
+
+                        foreach (string lchn in RPG.RPGChars.Keys) {
+                            lch = RPG.GrabChar(lchn);
+                            if (RPG_TMap.MapContains(lch.StrData, k)) {
+                                if (RPG_TMap.MapValueForKey(lch.StrData, k) == RPG_TMap.MapValueForKey(rch.StrData, k) && rch != lch) WriteLine(bt, "\t<td class='shared'>" + lchn + "</td>");
+                            }
+                        }
+                        WriteLine(bt, "</tr>");
+                    }
+                    WriteLine(bt, "</table></div>");
+
+                    Debug.WriteLine("  = Outputting stats");
+
+                    WriteLine(bt, "<h5>Stats:</h5><div style='height:200pt; width: 500pt; overflow-y:auto'><table class=content>");
+
+                    foreach (string k in RPG_TMap.MapKeys(rch.Stats)) { //For Local k$= EachIn MapKeys(rch.Stats)
+                        if (k != "") {
+                            WriteLine(bt, $"<tr><td>{ k }</td><td>=</td><td>{RPG.GrabChar(ch).Stat( k)}</td>");
+                            foreach (string lchn in RPG_TMap.MapKeys(RPG.RPGChars)) { //For lchn = EachIn MapKeys(RPGCHars)
+                                lch = RPG.GrabChar(lchn);
+                                if (RPG_TMap.MapContains(lch.Stats, k)) {
+                                    if (RPG_TMap.MapValueForKey(lch.Stats, k) == RPG_TMap.MapValueForKey(rch.Stats, k) && rch != lch) WriteLine(bt, "\t<td class='shared'>" + lchn + "</td>");
+                                }
+                            }
+                        }
+                        WriteLine(bt, "</tr>");
+                    }
+                    WriteLine(bt, "</table></div>");
+                    Debug.WriteLine("  = Outputting points");
+                    WriteLine(bt, "<h5>Points:</h5><div style='height:200pt; width: 500pt; overflow-y:auto'><table>");
+                    WriteLine(bt, "<tr style='background-color:#000000; color: #ffffff'><td>Key</td><td>Have</td><td>Minimum</td><td>Maximum</td><td>Linked to stat</td></tr>");
+                    foreach (string k in RPG_TMap.MapKeys(rch.Points)) { //For Local k$= EachIn MapKeys(rch.Points)
+                        if (k != "") {
+                            WriteLine(bt, $"<tr class=content><td>{k}</td><td align=right>{ RPG.GrabChar(ch).Point(k).Have}</td><td align=right>{ RPG.GrabChar(ch).Point(k).Minimum }</td><td align=right>{RPG.GrabChar(ch).Point(k).Maximum}</td><td align=center>{RPG.GrabChar(ch).Point( k).MaxCopy}</td>");
+                            foreach (string lchn in RPG_TMap.MapKeys(RPG.RPGChars)) { //For lchn = EachIn MapKeys(RPGCHars)
+                                lch = RPG.GrabChar(lchn);
+                                if (RPG_TMap.MapContains(lch.Points, k)) {
+                                    if (RPG_TMap.MapValueForKey(lch.Points, k) == RPG_TMap.MapValueForKey(rch.Points, k) && rch != lch) WriteLine(bt, "\t<td class='shared'>" + lchn + "</td>");
+                                }
+                            }
+                            WriteLine(bt, "</tr>");
+                        }
+                    }
+                    WriteLine(bt, "</table></div>");
+                    WriteLine(bt, "<h5>Lists</h5><div style='height:400pt; width: 500pt; overflow-y:auto'><ul>");
+                    foreach (string k in RPG_TMap.MapKeys(rch.Lists) ){ //For Local k$= EachIn MapKeys(rch.lists)
+                        WriteLine(bt, "\t<li>" + k + "<ol type=i>");
+                        foreach (string lchn in RPG_TMap.MapKeys(RPG.RPGChars) ){ //For lchn = EachIn MapKeys(RPGCHars)
+                            lch = RPG.GrabChar(lchn);
+                            if (RPG_TMap.MapContains(lch.Lists, k)) {
+                                if (lch.List(k) == rch.List(k) && rch != lch) WriteLine(bt, "~t<span style='color:rgb(180,100,255)'>This list has been shared with " + lchn + "</span><br>");
+
+                            }
+                        }
+
+                        if (rch.List(k).Count == 0) WriteLine(bt, "<span class='error'>This list is empty</span>"); //If Not CountList(rch.list(k)) WriteLine bt,"<span class='error'>This list is empty</span>"
+                        else {
+                            foreach (string item in rch.List(k)) { //For Local item$= EachIn rch.list(k)
+                                WriteLine(bt, "\t\t<li>" + item + "</li>");
+                            }
+                        }
+                        WriteLine(bt, "\t</ol>");
+                        WriteLine(bt, "\t</li>");
+                    }
+                    WriteLine(bt, "</ul></div>");
+                }
+            }
+            bt.Close();
+            Browser.Navigate(OutputFile);
+                return; // Return closure()
         }
     }
 }

@@ -74,7 +74,7 @@
                 </LinearGradientBrush>
             </ListBox.Background>
         </ListBox>
-        <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Left" Height="43" Margin="11,874,0,0" VerticalAlignment="Top" Width="176" FontFamily="Segoe UI Black" FontSize="18" RenderTransformOrigin="0.51,0.086">
+        <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Left" Height="43" Margin="11,874,0,0" VerticalAlignment="Top" Width="176" FontFamily="Segoe UI Black" FontSize="18" RenderTransformOrigin="0.51,0.086" Click="LoadButton_Click">
             <Button.Background>
                 <RadialGradientBrush>
                     <GradientStop Color="Blue" Offset="0"/>
